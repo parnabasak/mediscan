@@ -1,0 +1,196 @@
+{% extends 'base.html' %} {% block base %}
+<!--
+  Heads up! 👋
+
+  Plugins:
+    - @tailwindcss/forms
+-->
+{% load static %}
+<section class="bg-white">
+    <div class="lg:grid lg:min-h-screen lg:grid-cols-12">
+        <section
+            class="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6"
+        >
+            <img
+                alt="Night"
+                src="https://images.unsplash.com/photo-1584982751601-97dcc096659c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80"
+                class="absolute inset-0 h-full w-full object-cover opacity-80"
+            />
+
+            <div class="hidden lg:relative lg:block lg:p-12">
+                <a class="block text-white" href="/">
+                    <span class="sr-only">Home</span>
+                    <img class="h-8" src="{% static 'textlogo.svg' %}" alt="" />
+                </a>
+
+                <h2
+                    class="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl"
+                >
+                    Welcome to <span class="text-teal-600">MEDISCAN</span>
+                </h2>
+            </div>
+        </section>
+
+        <main
+            class="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6"
+        >
+            <div class="max-w-xl lg:max-w-3xl">
+                <div class="relative -mt-16 block lg:hidden">
+                    <a
+                        class="inline-flex h-16 w-16 items-center justify-center rounded-full bg-white text-blue-600 sm:h-20 sm:w-20"
+                        href="/"
+                    >
+                        <span class="sr-only">Home</span>
+                        <img class="h-8" src="{% static 'logo.svg' %}" alt="" />
+                    </a>
+
+                    <h1
+                        class="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl"
+                    >
+                        Welcome to MEDISCAN
+
+                   
+                </div>
+
+                <form action="" method="POST" class="mt-8 grid grid-cols-6 gap-6">
+                    {% csrf_token %}
+                    <div class="col-span-6 sm:col-span-6">
+                        <label
+                            for="name"
+                            class="block text-sm font-medium text-gray-700"
+                        >
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            pattern="[A-Za-z .-]{3,32}"
+                            title="Min 3 characters and can include alphabets, spaces, dots and hyphens"
+                            class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                            required
+                        />
+                    </div>
+
+                    <div class="col-span-6 sm:col-span-3">
+                        <label
+                            for="email"
+                            class="block text-sm font-medium text-gray-700"
+                        >
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                            required
+                        />
+                    </div>
+
+                    <div class="col-span-6 sm:col-span-3">
+                        <label
+                            for="phone"
+                            class="block text-sm font-medium text-gray-700"
+                        >
+                            Mobile Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="phone"
+                            name="phone"
+                            pattern="01[3-9]{1}[0-9]{8}"
+                            title="Enter a valid bangladeshi 11 digit phone number"
+                            class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                            required
+                        />
+                    </div>
+
+                    <div class="col-span-6">
+                        <label
+                            for="address"
+                            class="block text-sm font-medium text-gray-700"
+                        >
+                            Address
+                        </label>
+
+                        <input
+                            type="text"
+                            id="address"
+                            name="address"
+                            class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                        />
+                    </div>
+
+                    
+
+                    <div class="col-span-6 sm:col-span-3">
+                        <label
+                            for="password"
+                            class="block text-sm font-medium text-gray-700"
+                        >
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                        />
+                    </div>
+
+                    <div class="col-span-6 sm:col-span-3">
+                        <label
+                            for="confirm_password"
+                            class="block text-sm font-medium text-gray-700"
+                        >
+                            Password Confirmation
+                        </label>
+
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                        />
+                    </div>
+
+                  
+
+                    <div class="col-span-6">
+                        <p class="text-sm text-gray-500">
+                            By creating an account, you agree to our
+                            <a href="#" class="text-gray-700 underline">
+                                terms and conditions
+                            </a>
+                            and
+                            <a href="#" class="text-gray-700 underline"
+                                >privacy policy</a
+                            >.
+                        </p>
+                    </div>
+
+                    <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
+                        <button
+                            class="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                        >
+                            Create an account
+                        </button>
+
+                        <p class="mt-4 text-sm text-gray-500 sm:mt-0">
+                            Already have an account?
+                            <a href="#" class="text-gray-700 underline"
+                                >Log in</a
+                            >.
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</section>
+{% endblock %}

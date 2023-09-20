@@ -1,0 +1,133 @@
+{% extends 'dashboard/base.html' %}{% block content %}
+<!-- This example requires Tailwind CSS v2.0+ -->
+<div class="px-4 sm:px-6 lg:px-8">
+    <div class="mt-8">
+        <form action="" method="GET" id="search_form">
+            <div class="grid grid-cols-6 gap-4">
+                <input
+                    type="text"
+                    name="name"
+                    id="patient_name"
+                    class="col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    placeholder="Search By Name"
+                    value="{{request.GET.name}}"
+                />
+                <input
+                    type="text"
+                    name="phone"
+                    id="patient_phone"
+                    class="col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    placeholder="Search By Phone"
+                    value="{{request.GET.phone}}"
+                />
+
+                <button
+                    class="mt-1 text-sm bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-2 py-1 rounded-md"
+                    type="submit"
+                >
+                    Search Patient
+                </button>
+                <button
+                    class="mt-1 text-sm border border-black bg-gray-200 hover:bg-gray-300 font-bold px-2 py-1 rounded-md"
+                    onclick="resetsearchForm()"
+                >
+                    Reset Search
+                </button>
+                <script>
+                    function resetsearchForm() {
+                        document.getElementById("patient_phone").value = "";
+                        document.getElementById("patient_name").value = "";
+                        document.getElementById("search_form").form.submit();
+                    }
+                </script>
+            </div>
+        </form>
+    </div>
+    <div class="mt-8 flex flex-col">
+        <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div
+                class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8"
+            >
+                <div
+                    class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"
+                >
+                    <table class="min-w-full divide-y divide-gray-300">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                >
+                                    ID
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                >
+                                    Patient Name
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                >
+                                    Phone Number
+                                </th>
+
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                >
+                                    Created At
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                >
+                                    Details
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                            {% for patient in patients %}
+                            <tr>
+                                <td
+                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                >
+                                    {{ patient.id }}
+                                </td>
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                >
+                                    {{ patient.name }}
+                                </td>
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                >
+                                    {{ patient.phone }}
+                                </td>
+
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                >
+                                    {{ patient.date_created }}
+                                </td>
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                >
+                                    <a
+                                        href="{% url 'dashboard_patient_detail' patient.id %}"
+                                        class="text-indigo-600 hover:text-indigo-900"
+                                        >View</a
+                                    >
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

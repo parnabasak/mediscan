@@ -1,0 +1,365 @@
+{% extends 'dashboard/base.html' %}{% block content %}
+<!-- This example requires Tailwind CSS v2.0+ -->
+{% load static %}
+<div
+    class="p-4 sm:p-6 lg:p-8 bg-white rounded-lg shadow-md print:block print:shadow-none"
+>
+    <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+            <img class="h-8" src="{% static 'textlogo.svg' %}" alt="" />
+            <p class="mt-6 text-sm text-gray-500">
+                <span class="w-20 font-bold">Invoice ID: </span
+                >{{invoice.id}}
+            </p>
+            
+            <p class="mt-1 text-sm text-gray-700 font-bold">
+                <span class="w-20 text-gray-500 font-bold">Patient Name: </span>
+                {{invoice.patient.name}}
+            </p>
+            <p class="mt-1 text-sm text-gray-500">
+                <span class="w-20 font-bold">Patient Phone: </span
+                >{{invoice.patient.phone}}
+            </p>
+            <p class="mt-1 text-sm text-gray-500">
+                <span class="w-20 font-bold">Address: </span
+                >{{invoice.patient.address}}
+            </p>
+            <p class="mt-1 text-sm text-gray-500">
+                <span class="w-20 font-bold">Invoice Date: </span
+                >{{invoice.date_created}}
+            </p>
+
+        </div>
+        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <button
+                type="button"
+                onclick="window.print()"
+                class="print:hidden inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+            >
+                Print
+            </button>
+            {% if invoice.is_paid %}
+            <h1 class="p-4 font-bold text-4xl uppercase text-green-600">PAID</h1>
+            {% else %}
+            <h1 class="p-4 font-bold text-4xl uppercase text-red-600">DUE BDT {{invoice.due_amount}}</h1>
+            {% endif %}
+
+        </div>
+    </div>
+    <div class="-mx-4 mt-8 flex flex-col sm:-mx-6 md:mx-0">
+        <table class="min-w-full divide-y divide-gray-300">
+            <thead>
+                <tr>
+                    <th
+                        scope="col"
+                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 md:pl-0"
+                    >
+                        Test
+                    </th>
+                    <th
+                        scope="col"
+                        class="hidden py-3.5 px-3 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                    >
+                        Serial No.
+                    </th>
+                    <th
+                        scope="col"
+                        class="hidden py-3.5 px-3 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                    >
+                        Quantity
+                    </th>
+                    <th
+                        scope="col"
+                        class="hidden py-3.5 px-3 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                    >
+                        Rate
+                    </th>
+                    <th
+                        scope="col"
+                        class="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0"
+                    >
+                        Price
+                    </th>
+                    <th
+                        scope="col"
+                        class="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0"
+                    >
+                        Report
+                    </th>
+                    <th
+                        scope="col"
+                        class="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0"
+                    >
+                        Status
+                    </th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in invoice.items.all %}
+                <tr class="border-b border-gray-200">
+                    <td class="py-4 pl-4 pr-3 text-sm sm:pl-6 md:pl-0">
+                        <div class="font-medium text-gray-900">
+                            {{item.test}}
+                        </div>
+                        <div class="mt-0.5 text-gray-500 sm:hidden">
+                            1 x {{item.test.price}}
+                        </div>
+                    </td>
+                    <td
+                        class="hidden py-4 px-3 text-right text-sm text-gray-500 sm:table-cell"
+                    >
+                        {{item.serial}}
+                    </td>
+                    <td
+                        class="hidden py-4 px-3 text-right text-sm text-gray-500 sm:table-cell"
+                    >
+                        1
+                    </td>
+                    <td
+                        class="hidden py-4 px-3 text-right text-sm text-gray-500 sm:table-cell"
+                    >
+                        {{item.test.price}}
+                    </td>
+                    <td
+                        class="py-4 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-6 md:pr-0"
+                    >
+                        {{item.test.price}}
+                    </td>
+                    <td
+                        class="py-4 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-6 md:pr-0"
+                    >
+                    {% if item.report %}
+                    <a 
+                    href="/media/{{item.report}}"
+                    download
+                    class="text-indigo-600 hover:text-indigo-900"
+                    >Download</a>
+                        {% else  %}
+                        Not Ready
+                        {% endif %}
+                    </td>
+                    
+                    <td
+                        class="py-2 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-6 md:pr-0"
+                    >{% if request.user.is_staff %}
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="update_status">
+                            <input type="hidden" name="item_id" value="{{item.id}}">
+                            <select name="status" id="status" class="text-sm rounded-lg" onclick="this.form.submit()">
+                                <option value="Pending" {% if item.status == '' %}selected{% endif %}>Pending</option>
+                                <option value="Specimen Collected" {% if item.status == 'Specimen Collected' %}selected{% endif %}>Specimen Collected</option>
+                                <option value="Report Ready" {% if item.status == 'Report Ready' %}selected{% endif %}>Report Ready</option>
+                            </select>
+                        </form>
+                        {% else %}
+                        {{item.status}}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th
+                        scope="row"
+                        colspan="3"
+                        class="hidden pl-6 pr-3 pt-6 text-right text-sm font-normal text-gray-500 sm:table-cell md:pl-0"
+                    >
+                        Subtotal
+                    </th>
+                    <th
+                        scope="row"
+                        class="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:hidden"
+                    >
+                        Subtotal
+                    </th>
+                    <td
+                        class="pl-3 pr-4 pt-6 text-right text-sm text-gray-500 sm:pr-6 md:pr-0"
+                    >
+                        {{invoice.total}}
+                    </td>
+                </tr>
+                <tr>
+                    <th
+                        scope="row"
+                        colspan="3"
+                        class="hidden pl-6 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell md:pl-0"
+                    >
+                        Tax
+                    </th>
+                    <th
+                        scope="row"
+                        class="pl-4 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden"
+                    >
+                        Tax
+                    </th>
+                    <td
+                        class="pl-3 pr-4 pt-4 text-right text-sm text-gray-500 sm:pr-6 md:pr-0"
+                    >
+                        0.00
+                    </td>
+                </tr>
+                <tr>
+                    <th
+                        scope="row"
+                        colspan="3"
+                        class="hidden pl-6 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell md:pl-0"
+                    >
+                        Total
+                    </th>
+                    <th
+                        scope="row"
+                        class="pl-4 pr-3 pt-4 text-left text-sm font-semibold text-gray-900 sm:hidden"
+                    >
+                        Total
+                    </th>
+                    <td
+                        class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0"
+                    >
+                        {{invoice.total}}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="-mx-4 mt-8 flex flex-col sm:-mx-6 md:mx-0">
+        <h1 class="font-bold">Payment Information</h1>
+        <table class="min-w-full divide-y divide-gray-300">
+            <thead>
+                <tr>
+                    <th
+                        scope="col"
+                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 md:pl-0"
+                    >
+                        Payment Method
+                    </th>
+                    <th
+                        scope="col"
+                        class="hidden py-3.5 px-3 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                    >
+                        Account/Card Number
+                    </th>
+                    <th
+                        scope="col"
+                        class="hidden py-3.5 px-3 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                    >
+                        Amount
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in invoice.payments.all %}
+                <tr class="border-b border-gray-200">
+                    <td class="py-4 pl-4 pr-3 text-sm sm:pl-6 md:pl-0">
+                        <div class="font-medium text-gray-900">
+                            {{item.method}}
+                        </div>
+                        <div class="mt-0.5 text-gray-500 sm:hidden">
+                            {{item.amount}} from {{item.account}}
+                        </div>
+                    </td>
+                    <td
+                        class="hidden py-4 px-3 text-right text-sm text-gray-500 sm:table-cell"
+                    >
+                        {{item.account}}
+                    </td>
+                    <td
+                        class="hidden py-4 px-3 text-right text-sm text-gray-500 sm:table-cell"
+                    >
+                        {{item.amount}}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th
+                        scope="row"
+                        colspan="2"
+                        class="hidden pl-6 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell md:pl-0"
+                    >
+                        Total
+                    </th>
+                    <th
+                        scope="row"
+                        class="pl-4 pr-3 pt-4 text-left text-sm font-semibold text-gray-900 sm:hidden"
+                    >
+                        Total
+                    </th>
+                    <td
+                        class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0"
+                    >
+                        {{invoice.paid}}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<div class="p-4 sm:p-6 lg:p-8 print:hidden mt-8 bg-white rounded-lg shadow-md">
+    <h1 class="font-bold text-2xl">Add Payment</h1>
+    <form action="" class="mt-4" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add_payment">
+        <div class="grid grid-cols-6 gap-6">
+            <div class="col-span-6 sm:col-span-2">
+                <label
+                    for="method"
+                    class="block text-sm font-medium text-gray-700"
+                    >Payment Method</label
+                >
+                <select
+                    name="method"
+                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                >
+                    <option value="Cash">Cash</option>
+                    <option value="Card">Card</option>
+                    <option value="bKash">bKash</option>
+                    <option value="Rocket">Rocket</option>
+                    <option value="Nagad">Nagad</option>
+                </select>
+            </div>
+            <div class="col-span-6 sm:col-span-1">
+                <label
+                    for="amount"
+                    class="block text-sm font-medium text-gray-700"
+                    >Amount</label
+                >
+                <input
+                    name="amount"
+                    id="amount"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value="0"
+                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+            </div>
+            <div class="col-span-6 sm:col-span-2">
+                <label
+                    for="method"
+                    class="block text-sm font-medium text-gray-700"
+                    >Card/MFS Number</label
+                >
+                <input
+                    name="account"
+                    id="account"
+                    type="text"
+                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+            </div>
+            <div class="col-span-6 sm:col-span-1">
+                 <button
+                type="submit"
+                class="mt-6 w-full  ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+                Add
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

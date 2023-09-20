@@ -1,0 +1,48 @@
+{% extends 'index/base.html' %} {% block content %}
+<div class="w-full max-w-7xl mx-auto">
+    {% for speciality in specialities %}
+    <header>
+        <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+            <div class="sm:flex sm:items-center sm:justify-between">
+                <div class="text-center sm:text-left">
+                    <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">
+                        Doctors for {{ speciality.name }}
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </header>
+    <ul
+        role="list"
+        class="mx-auto text-center space-y-16 sm:grid sm:grid-cols-2 sm:gap-16 sm:space-y-0 lg:grid-cols-3 lg:max-w-5xl"
+    >
+        {% for doctor in speciality.doctors.all %}
+        <a
+            href="{% url 'doctor_detail' doctor.id %}"
+            class="py-6 rounded-xl overflow-hidden bg-white hover:border hover:shadow-lg"
+        >
+            <div class="space-y-6">
+                <div class="mx-auto h-40 w-40 rounded-full xl:w-56 xl:h-56">
+                    <img
+                        class="object-cover object-center h-full w-full rounded-full"
+                        src="/media/{{doctor.image}}"
+                        alt=""
+                    />
+                </div>
+                <div class="space-y-2">
+                    <div class="text-lg leading-6 font-medium space-y-1">
+                        <h3>{{doctor.name}}</h3>
+                        <p class="text-indigo-600">{{doctor.degree}}</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %} {% if speciality.doctors.all|length == 0 %}
+        <h1 class="col-span-3 font-bold text-lg text-center">
+            No Doctor Available in this speciality.
+        </h1>
+        {% endif %}
+    </ul>
+    {% endfor %}
+</div>
+{% endblock %}

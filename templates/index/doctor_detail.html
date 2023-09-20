@@ -1,0 +1,232 @@
+{% extends 'index/base.html' %} {% block content %}
+<div class="w-full max-w-7xl mx-auto grid md:grid-cols-4 gap-4 py-4">
+    {% if error %}
+    <div class="col-span-4 bg-red-100 p-4">
+        <h1 class="text-center text-red-500 font-bold">{{ error }}</h1>
+    </div>
+    {% else %}
+    <div class="col-span-3">
+        <div
+            class="bg-white shadow overflow-hidden sm:rounded-lg p-4 flex gap-8 items-center"
+        >
+            <div class="h-48 w-48">
+                <img
+                    class="object-cover object-center h-full w-full rounded-full"
+                    src="/media/{{ doctor.image }}"
+                    alt=""
+                />
+            </div>
+            <div>
+                <h1 class="font-bold text-3xl">{{doctor.name}}</h1>
+                <h2 class="mt-2 text-xl">{{doctor.degree}}</h2>
+                <h3 class="mt-2 text-3xl text-pink-500 font-bold">
+                    ৳ {{doctor.fees}}
+                    <span class="text-lg text-gray-700">Per Consultation</span>
+                </h3>
+            </div>
+        </div>
+        <!-- This example requires Tailwind CSS v2.0+ -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg mt-4">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Details
+                </h3>
+            </div>
+            <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+                <dl class="sm:divide-y sm:divide-gray-200">
+                    <div
+                        class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                    >
+                        <dt class="text-sm font-medium text-gray-500">
+                            Full name
+                        </dt>
+                        <dd
+                            class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        >
+                            {{doctor.name}}
+                        </dd>
+                    </div>
+                    <div
+                        class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                    >
+                        <dt class="text-sm font-medium text-gray-500">
+                            Degree
+                        </dt>
+                        <dd
+                            class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        >
+                            {{doctor.degree}}
+                        </dd>
+                    </div>
+                    <div
+                        class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                    >
+                        <dt class="text-sm font-medium text-gray-500">
+                            Speciality
+                        </dt>
+                        <dd
+                            class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        >
+                            {{doctor.speciality}}
+                        </dd>
+                    </div>
+                    <div
+                        class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                    >
+                        <dt class="text-sm font-medium text-gray-500">
+                            BMDC Reg. Number
+                        </dt>
+                        <dd
+                            class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        >
+                            {{doctor.bmdc}}
+                        </dd>
+                    </div>
+                    <div
+                        class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                    >
+                        <dt class="text-sm font-medium text-gray-500">
+                            Fees Per visit
+                        </dt>
+                        <dd
+                            class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        >
+                            BDT {{doctor.fees}}
+                        </dd>
+                    </div>
+
+                    <div
+                        class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                    >
+                        <dt class="text-sm font-medium text-gray-500">
+                            Schedules
+                        </dt>
+                        <dd
+                            class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        >
+                            {% for schedule in doctor.schedules.all %}
+                            <!--prettier-ignore-->
+                            {{schedule.day}} {{schedule.start_time | time:'h:i A'}} -
+                            {{schedule.end_time | time:'h:i A'}} <br />
+                            {% endfor %}
+                        </dd>
+                    </div>
+
+                    <div
+                        class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                    >
+                        <dt class="text-sm font-medium text-gray-500">
+                            About {{doctor.name}}
+                        </dt>
+                        <dd
+                            class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        >
+                            {{doctor.bio}}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div>
+        {% if success %}
+        <div
+            class="bg-green-200 text-sm shadow-lg rounded-lg border p-4 text-green-700 mb-4 font-bold"
+        >
+            {{success}}
+        </div>
+        {% endif %} {% if error %}
+        <div
+            class="bg-red-200 text-sm shadow-lg rounded-lg border p-4 text-red-700 mb-4 font-bold"
+        >
+            {{error}}
+        </div>
+        {% endif %}
+
+        <div class="bg-white shadow-lg rounded-lg border p-4">
+            <h1 class="font-bold text-lg">Book an appointment</h1>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div>
+                    <div class="mt-2">
+                        <label
+                            for="date"
+                            class="block text-sm font-medium text-gray-900"
+                        >
+                            Select Date
+                        </label>
+
+                        <select
+                            name="date"
+                            id="date"
+                            class="mt-1.5 w-full rounded-lg border-gray-300 text-gray-700 sm:text-sm"
+                            onchange="getTimeslots(this.value, this.options[this.selectedIndex].getAttribute('data-slots'))"
+                            required
+                        >
+                            <option value="">Please select</option>
+                            <!-- prettier-ignore -->
+                            {% for date, data in dates.items %}
+                            <option
+                                value="{{date}}"
+                                data-slots="{{data.slots}}"
+                            >
+                                {{data.date}} - {{data.day}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mt-2">
+                        <label
+                            for="time"
+                            class="block text-sm font-medium text-gray-900"
+                        >
+                            Select Time Slot
+                        </label>
+
+                        <select
+                            name="time"
+                            id="time"
+                            class="mt-1.5 w-full rounded-lg border-gray-300 text-gray-700 sm:text-sm"
+                            disabled
+                            required
+                        >
+                            <option value="">Please select date first</option>
+                        </select>
+                    </div>
+                    <div class="mt-4">
+                        <button
+                            class="w-full rounded-md bg-pink-600 hover:bg-pink-700 px-5 py-2.5 text-sm font-bold text-white transition"
+                            type="submit"
+                        >
+                            Confirm Appointment
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+<script type="text/javascript">
+    function getTimeslots(date, slots) {
+        if (date) {
+            const data = JSON.parse(slots);
+            document.getElementById("time").disabled = false;
+            document.getElementById("time").innerHTML =
+                '<option value="">Please select time</option>';
+            Object.entries(data).forEach((entry) => {
+                const [key, value] = entry;
+                disabled = value == "booked" ? "disabled" : "";
+                booked = value == "booked" ? " (Booked)" : "";
+                // prettier-ignore
+                document.getElementById("time").innerHTML +=
+                    '<option value="' + key + '" '+ disabled+'>' + key + booked + "</option>";
+            });
+        } else {
+            document.getElementById("time").disabled = true;
+            document.getElementById("time").innerHTML =
+                '<option value="">Please select date first</option>';
+        }
+    }
+</script>
+{% endblock %}

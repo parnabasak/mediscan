@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-100">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script src="https://cdn.tailwindcss.com?plugins=aspect-ratio,forms,typography,line-clamp"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.css"
+            integrity="sha512-Z0kTB03S7BU+JFU0nw9mjSBcRnZm2Bvm0tzOX9/OuOuz01XQfOpa0w/N9u6Jf2f1OAdegdIPWZ9nIZZ+keEvBw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins&family=Special+Elite&display=swap"
+            rel="stylesheet"
+        />
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        aspectRatio: {
+                            video: "16/9",
+                            square: "1/1",
+                            wide: "16/5",
+                        },
+                        fontFamily: {
+                            poppins: ["Poppins", "sans-serif"],
+                            inter: ["Inter", "sans-serif"],
+                            seal: ["Special Elite", "cursive"],
+                        },
+                        colors: ({ colors }) => ({
+                            primary: "#F47859",
+                            secondary: "#061A3A",
+                            inherit: colors.inherit,
+                            current: colors.current,
+                            transparent: colors.transparent,
+                            black: colors.black,
+                            white: colors.white,
+                            slate: colors.slate,
+                            gray: colors.gray,
+                            zinc: colors.zinc,
+                            neutral: colors.neutral,
+                            stone: colors.stone,
+                            red: colors.red,
+                            orange: colors.orange,
+                            amber: colors.amber,
+                            yellow: colors.yellow,
+                            lime: colors.lime,
+                            green: colors.green,
+                            emerald: colors.emerald,
+                            teal: colors.teal,
+                            cyan: colors.cyan,
+                            sky: colors.sky,
+                            blue: colors.blue,
+                            indigo: colors.indigo,
+                            violet: colors.violet,
+                            purple: colors.purple,
+                            fuchsia: colors.fuchsia,
+                            pink: colors.pink,
+                            rose: colors.rose,
+                        }),
+                    },
+                },
+            };
+        </script>
+    </head>
+    <body class="h-full">
+        {% block base %}{% endblock %}
+    </body>
+</html>
